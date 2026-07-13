@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zen of Search"
+  short_description: "Route and combine four web-search MCP providers"
+  default_prompt: "Use $zen-of-search to research this topic with the best available search providers."

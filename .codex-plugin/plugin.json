@@ -1,0 +1,22 @@
+{
+  "name": "zen-skills",
+  "version": "0.1.0",
+  "description": "A collection of zen-skills for enhanced development workflows",
+  "author": {
+    "name": "Ttungx",
+    "url": "https://github.com/Ttungx"
+  },
+  "repository": "https://github.com/Ttungx/Zen-skills",
+  "license": "MIT",
+  "keywords": ["skills", "zen", "workflow"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Zen Skills",
+    "shortDescription": "A collection of zen-skills for enhanced development workflows",
+    "developerName": "Ttungx",
+    "category": "Productivity",
+    "defaultPrompt": [
+      "Use zen-of-search to research this topic with the best available search providers."
+    ]
+  }
+}
