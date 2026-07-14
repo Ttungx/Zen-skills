@@ -4,12 +4,5 @@
   "description": "A collection of zen-skills for enhanced development workflows",
   "author": {
     "name": "Ttungx"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Ttungx/Zen-skills.git"
-  },
-  "license": "MIT",
-  "keywords": ["skills", "zen", "workflow"],
-  "skills": "./skills/"
+  }
 }
