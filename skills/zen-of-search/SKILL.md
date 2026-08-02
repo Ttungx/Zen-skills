@@ -1,46 +1,142 @@
 ---
-name: zen-of-search
-description: Route and combine Anysearch, Exa, Firecrawl, and Tavily MCP tools for external information work. Use for current facts, daily search, scientific and academic research, market and competitor research, knowledge discovery, blogs and community discussions, GitHub and project research, fact-checking, URL reading, website extraction, crawling, and deep multi-source research. Select the smallest useful provider set, verify important claims against original sources, and conserve Tavily quota.
+name: zen-of-search 
+description: Select and combine Exa, Tavily, AnySearch, and Firecrawl for general-purpose external information retrieval. Use when a task requires current facts, web discovery, source finding, URL reading, fact verification, parallel lookup, or website exploration. Match the user's question to each MCP's retrieval strength, begin with one tool, and add another only when it improves discovery, acquisition, or verification. 
+compatibility: Designed for MCP environments exposing some or all of Exa, Tavily, AnySearch, and Firecrawl. Treat the available tool schemas as authoritative.
 ---
-
 # Zen of Search
 
-Choose tools by information need, not by habit. Start with one primary provider; add a complementary provider only when coverage, confidence, or source diversity materially improves. Do not call all four by default.
+Search is the reduction of uncertainty through evidence.
 
-## Route Providers
+Before choosing a tool, ask:
 
-| Provider | Prefer for | Key behavior |
-| --- | --- | --- |
-| Anysearch | Fast general lookup, current facts, news, structured verticals, multi-angle batches | Use general search directly. For academic, finance, legal, health, security, code, or other structured verticals, call `get_sub_domains` before passing a domain. Use `batch_search` for 2-5 related queries and `extract` for HTML pages. |
-| Exa | Semantic discovery, technical blogs, hard-to-name sources, companies/people, research and project discovery | Describe the ideal result in natural language. Use search to find high-relevance sources, then batch-fetch the best URLs when snippets are insufficient. |
-| Firecrawl | Web extraction, dynamic pages, PDFs, site mapping/crawling, structured extraction, GitHub, papers, monitoring, or interactive pages | Use search for discovery, scrape for a known page, map before a targeted crawl, and dedicated paper/GitHub tools when applicable. Submit search feedback after consuming search results. |
-| Tavily | Independent second opinion, quick current search, or finished cited synthesis when other tools are insufficient | Conserve quota. Default to at most one Tavily call per task. Prefer `basic` or `fast` search; use research only when a decision-ready multi-source report justifies the cost. |
+1. Is the target precisely known or only semantically describable?
+2. Does freshness or exact filtering matter?
+3. Is the information structured or repeated across several entities?
+4. Is finding the source difficult, or is acquiring its content difficult?
 
-## Match Common Scenarios
+Use the shortest reliable path from the question to an inspected source.
 
-- **Daily or current lookup:** start with Anysearch. Add Exa when the likely source is a specific article, company page, or technical document.
-- **Scientific research:** combine Firecrawl paper search with Anysearch academic verticals. Use Exa for semantic recall and related terminology. Read original papers before making load-bearing claims.
-- **Market or competitor research:** use Anysearch business/finance verticals for structured facts, Exa for companies, people, and narrative sources, and Firecrawl for official sites, pricing, changelogs, and structured extraction.
-- **Blogs and community research:** use Exa for semantic discovery and Anysearch for broad/current coverage. Use Firecrawl to read selected posts or difficult pages.
-- **GitHub and project research:** start with Firecrawl GitHub search or GitHub-category search; add Exa for project discovery and Anysearch code verticals for structured lookup.
-- **Knowledge-base ingestion:** use Firecrawl map, crawl, and scrape to preserve source structure. Use Exa fetch for a small known URL set. Keep source URLs and retrieval dates.
-- **Deep research:** search independent angles with Anysearch, Exa, and Firecrawl; deduplicate, read primary sources, reconcile conflicts, and synthesize. Use Tavily only as a scarce independent check or when its research output is specifically valuable.
+## Know the Tools
 
-## Follow the Search Loop
+### Exa — discover by meaning
 
-1. Identify freshness, breadth, source type, structured fields, page complexity, and decision stakes.
-2. Pick one primary provider and, when justified, one complementary provider with a different retrieval strength.
-3. Split broad questions into distinct query angles. Use provider-native filters rather than stuffing every constraint into one query.
-4. Deduplicate by canonical URL and source identity. Prefer official documentation, papers, filings, repositories, and first-party statements.
-5. Open the strongest sources. Treat search snippets as discovery evidence, not final evidence.
-6. Cross-check consequential or disputed claims with an independent source or provider.
-7. Report source dates, conflicting evidence, uncertainty, and missing information. Cite the pages actually read.
+Use Exa when the desired source is easier to describe than to name.
 
-## Control Cost and Noise
+Best for unknown projects, similar products, niche articles, companies, people, technical approaches, and broad exploration before the correct terminology is known.
 
-- Keep exploratory result sets small, usually 5-8 results per query.
-- Do not repeat an unchanged query across providers. Change the angle or use the second provider for verification.
-- Do not crawl an entire site when map plus targeted scrape is enough.
-- Reserve Firecrawl Agent and Tavily Research for genuinely multi-step tasks.
-- If a provider is unavailable or returns weak results, reformulate once, then switch providers instead of retrying blindly.
-- Never invent source contents, publication details, or unavailable facts.
+Describe the ideal source in natural language: what it discusses, what type of page it is, and what makes it relevant. Use search to form a candidate set, then fetch only the strongest ordinary pages.
+
+Exa answers: **Where might the relevant knowledge be?**
+
+### Tavily — retrieve with precision and freshness
+
+Use Tavily when the target is clear and current relevance, dates, exact phrases, domains, or geographic filters matter.
+
+Best for recent events, releases, prices, schedules, named facts, and queries that benefit from a continuous search–extract–map–crawl workflow.
+
+Prefer native filters over long queries. After Tavily finds an ordinary page, continue with Tavily Extract unless another tool offers a concrete advantage.
+
+Tavily answers: **What currently and precisely matches the question?**
+
+### AnySearch — retrieve by structure and multiplicity
+
+Use AnySearch when the question maps to a supported vertical domain or contains several independent lookups.
+
+Best for identifiers and structured subjects such as CVEs, tickers, DOIs, patents, academic records, travel data, and comparisons across several entities.
+
+Inspect the vertical schema before searching. Use batch search for two to five independent queries, but not when later queries depend on earlier results.
+
+AnySearch answers: **Can this problem be expressed as structured or parallel queries?**
+
+### Firecrawl — acquire the source itself
+
+Use Firecrawl when obtaining usable page content is the difficult part.
+
+Best for dynamic pages, PDFs, tables, screenshots, structured extraction, site mapping, and bounded crawling.
+
+Use search when discovery and extraction should happen together, scrape for one known page, map when the relevant page inside a site is unknown, and crawl only when several pages are genuinely required.
+
+Firecrawl answers: **How can the source be reliably acquired and transformed?**
+
+## Route and Combine
+
+Choose the primary tool according to the dominant difficulty:
+
+| Need                                  | Start with |
+| ------------------------------------- | ---------- |
+| Unknown source or fuzzy concept       | Exa        |
+| Current, exact, or filterable fact    | Tavily     |
+| Structured record or several entities | AnySearch  |
+| Difficult page or website structure   | Firecrawl  |
+
+These tools overlap. Do not assign them rigid territories. Let the user's question determine the first tool, then let the remaining information gap determine whether another is needed.
+
+Use these common combinations:
+
+```text
+Semantic discovery:
+Exa → select URLs → Exa fetch or Firecrawl for difficult pages
+
+Fresh factual lookup:
+Tavily search → official source → Tavily extract
+
+Parallel structured lookup:
+AnySearch batch → select important results → inspect original sources
+
+Website investigation:
+map → select paths → scrape a few pages → crawl only if necessary
+
+Independent verification:
+likely answer → primary source, independent source, limitation, or contradiction
+```
+
+A second tool must perform a different job. Do not repeat the same query across providers merely to collect more links.
+
+## Follow a Small Search Loop
+
+1. State the exact information gap.
+2. Choose one primary tool.
+3. Retrieve a small candidate set, usually three to eight results.
+4. Remove duplicates, mirrors, syndicated copies, and low-value summaries.
+5. Open the strongest original sources.
+6. Add one complementary tool only when:
+   - coverage is weak;
+   - content cannot be acquired;
+   - structured or batch retrieval would reduce work;
+   - an important claim needs independent verification.
+7. Answer when the evidence is sufficient and expose any remaining uncertainty.
+
+Prefer sources closest to the underlying fact:
+
+1. official documentation, source repositories, standards, datasets, filings, and first-party records;
+2. maintainers, authors, researchers, institutions, and direct participants;
+3. reputable independent reporting and technical analysis;
+4. community discussions and secondary summaries.
+
+Search snippets locate evidence; they are not evidence by themselves.
+
+## Keep the Discipline
+
+- Start with one provider; two are enough for most researched answers.
+- Use a third only for consequential disputes or clear coverage gaps.
+- Batch independent queries and URLs when supported.
+- Do not fetch every result.
+- Use native filters before multiplying queries.
+- Map before crawling, and bound every crawl by path, depth, and page count.
+- Escalate acquisition gradually: ordinary fetch → advanced extraction → Firecrawl → browser interaction.
+- Search for limitations or contradictions when a claim is important or surprising.
+- Do not retry the same failed strategy indefinitely.
+- Stop when further searching is unlikely to change the conclusion.
+- Answer the user's question directly; do not narrate routine tool calls.
+- Cite sources actually inspected and distinguish sourced facts from inference.
+
+## The Way
+
+```text
+Let the question reveal the retrieval shape.
+Let one tool handle one stage well.
+Combine tools only across distinct stages.
+Read the source, not merely the result.
+Verify in proportion to consequence.
+Stop when more searching no longer changes the answer.
+```
